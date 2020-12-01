@@ -15,9 +15,9 @@ class MainViewModel @ViewModelInject constructor(
 
     fun getCurrentUserViewModel() = repository.getCurrentUserRepository()
 
-    suspend fun loginUser(email: String, password: String) = flow {
+    suspend fun loginUserViewModel(email: String, password: String) = flow {
         emit(LoginResponse.LoginLoading)
-        if (email.isEmpty() && password.isEmpty()){
+        if (email.isEmpty() or password.isEmpty()){
             emit(LoginResponse.LoginError("Email or Password can't be left empty"))
         }else{
             withContext(Dispatchers.IO){
@@ -42,8 +42,6 @@ class MainViewModel @ViewModelInject constructor(
                         }
                     }
                 }
-
-
             }
         }
     }

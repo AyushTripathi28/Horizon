@@ -37,25 +37,29 @@ class LoginActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
 
         viewBinding.btnLogin.setOnClickListener {
-            val email = viewBinding.etEmail.text.toString().trim()
-            val password = viewBinding.etPassword.text.toString().trim()
+            loginUser()
+        }
+    }
 
-            CoroutineScope(Dispatchers.Main).launch {
-                viewModel.loginUser(email, password).collect {
-                    when(it){
-                        is LoginResponse.LoginLoading -> showLoading()
+    private fun loginUser(){
+        val email = viewBinding.etEmail.text.toString().trim()
+        val password = viewBinding.etPassword.text.toString().trim()
 
-                        is LoginResponse.LoginSuccess -> {
-                            hideLoading()
-                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel.loginUserViewModel(email, password).collect {
+                when(it){
+                    is LoginResponse.LoginLoading -> showLoading()
 
-                        is LoginResponse.LoginError -> {
-                            hideLoading()
-                            Snackbar.make(viewBinding.root, "${it.error}", Snackbar.LENGTH_SHORT).show()
-                        }
+                    is LoginResponse.LoginSuccess -> {
+                        hideLoading()
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+
+                    is LoginResponse.LoginError -> {
+                        hideLoading()
+                        Snackbar.make(viewBinding.root, "${it.error}", Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -66,6 +70,7 @@ class LoginActivity : AppCompatActivity() {
         viewBinding.apply {
             etEmail.isEnabled = false
             etPassword.isEnabled = false
+            btnLogin.isEnabled = false
             pbLogin.visibility = View.VISIBLE
         }
     }
@@ -74,6 +79,7 @@ class LoginActivity : AppCompatActivity() {
         viewBinding.apply {
             etEmail.isEnabled = true
             etPassword.isEnabled = true
+            btnLogin.isEnabled = true
             pbLogin.visibility = View.GONE
         }
     }
