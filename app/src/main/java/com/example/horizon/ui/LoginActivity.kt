@@ -1,8 +1,12 @@
 package com.example.horizon.ui
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.activity.viewModels
 import com.example.horizon.MainActivity
@@ -28,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
         if (currentUser != null){
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 
@@ -35,10 +40,17 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        setSignUpSpan()
 
         viewBinding.btnLogin.setOnClickListener {
             loginUser()
         }
+        viewBinding.tvNewSignup.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
     }
 
     private fun loginUser(){
@@ -66,12 +78,20 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun setSignUpSpan(){
+        val newSignUpString = SpannableString("Don't have an account? Sign up")
+        val foregroundColor = ForegroundColorSpan(Color.BLUE)
+        newSignUpString.setSpan(foregroundColor, 23,30, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        viewBinding.tvNewSignup.text = newSignUpString
+    }
+
     private fun showLoading(){
         viewBinding.apply {
             etEmail.isEnabled = false
             etPassword.isEnabled = false
             btnLogin.isEnabled = false
             pbLogin.visibility = View.VISIBLE
+            tvNewSignup.isEnabled = false
         }
     }
 
@@ -81,6 +101,7 @@ class LoginActivity : AppCompatActivity() {
             etPassword.isEnabled = true
             btnLogin.isEnabled = true
             pbLogin.visibility = View.GONE
+            tvNewSignup.isEnabled = true
         }
     }
 }
