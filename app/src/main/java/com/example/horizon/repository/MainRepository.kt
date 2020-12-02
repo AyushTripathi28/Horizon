@@ -1,12 +1,17 @@
 package com.example.horizon.repository
 
 
+import android.net.Uri
 import android.util.Log
+import com.example.horizon.models.CurrentUser
 import com.example.horizon.response.LoginResponse
+import com.example.horizon.response.PostUploadResponse
 import com.example.horizon.response.SignUpResponse
 import com.example.horizon.utils.CurrentUserDetails
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -14,11 +19,34 @@ import javax.inject.Inject
 
 class MainRepository @Inject constructor(
         private val auth: FirebaseAuth,
-        private val fireStore: FirebaseFirestore
+        fireStore: FirebaseFirestore,
+        storage: FirebaseStorage
 ) {
+
+    private val userCollectionRef = fireStore.collection("Users")
+    private val allPostCollectionRef = fireStore.collection("All_posts")
+    private val storageRef = storage.reference
 
     fun getCurrentUserRepository() = auth.currentUser
 
+    fun getCurrentUserDetailsRepository(currentUserUid: String){
+        userCollectionRef.document(currentUserUid).addSnapshotListener { value, error ->
+            error?.let {
+                return@addSnapshotListener
+            }
+            value?.let {
+                val currentUserDetails = it.toObject(CurrentUser::class.java)
+                CurrentUserDetails.apply {
+                    currentUserDetails?.let { currentUser ->
+                        this.userName = currentUser.name
+                        this.userBio = currentUser.bio
+                        this.userProfileImgUrl = currentUser.imageUrl
+                    }
+                    userUid = currentUserUid
+                }
+            }
+        }
+    }
     suspend fun loginUserRepository(email: String, password: String) = flow<LoginResponse>{
         Log.d("MainRepo", "Thread while login is : ${Thread.currentThread().name}")
         auth.signInWithEmailAndPassword(email, password).await()
@@ -31,17 +59,38 @@ class MainRepository @Inject constructor(
 
     suspend fun signUpNewUserRepository(name: String, email: String, password: String) = flow<SignUpResponse> {
         auth.createUserWithEmailAndPassword(email, password).await()
-        val userHashMap = HashMap<String, String>()
-        userHashMap["name"] = name
-        userHashMap["bio"] = ""
-        userHashMap["imageUrl"] = ""
-        val userCollectionRef = fireStore.collection("Users")
-        userCollectionRef.add(userHashMap).await()
+        val currentUser = CurrentUser(name)
+        val currentUserUid = auth.currentUser?.uid
+        userCollectionRef.document(currentUserUid!!).set(currentUser, SetOptions.merge()).await()
         CurrentUserDetails.userName = name
         CurrentUserDetails.userUid = auth.currentUser?.uid.toString()
         emit(SignUpResponse.SignUpSuccess("User successfully signed up"))
 
     }.catch {
         emit(SignUpResponse.SignUpError("Something went wrong"))
+    }
+
+    suspend fun uploadNewPostRepository(imgUri: Uri, postTitle: String, postContent: String) = flow<PostUploadResponse> {
+        val currentUserId = CurrentUserDetails.userUid
+        val authorName = CurrentUserDetails.userName
+        val currentTimeInMillis = System.currentTimeMillis()
+        val likedBy = arrayListOf<String>()
+
+        val storageRefChild = storageRef.child("${currentUserId}_${currentTimeInMillis}.jpg")
+        storageRefChild.putFile(imgUri).await()
+        val imgUrl = storageRefChild.downloadUrl.await().toString()
+
+        val newPostHashMap = HashMap<String, Any>()
+        newPostHashMap["title"] = postTitle
+        newPostHashMap["content"] = postContent
+        newPostHashMap["img_url"] = imgUrl
+        newPostHashMap["author"] = authorName
+        newPostHashMap["author_id"] = currentUserId
+        newPostHashMap["liked_by"] = likedBy
+
+        allPostCollectionRef.document(imgUrl).set(newPostHashMap, SetOptions.merge()).await()
+        emit(PostUploadResponse.PostUploadSuccess("Post uploaded"))
+    }.catch {
+        emit(PostUploadResponse.PostUploadError("Something went wrong while uploading"))
     }
 }

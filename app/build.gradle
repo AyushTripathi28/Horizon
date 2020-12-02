@@ -76,6 +76,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     //Firebase firestore
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    //Firebase storage
+
+    implementation 'com.google.firebase:firebase-storage-ktx'
 
 
 }

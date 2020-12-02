@@ -14,7 +14,11 @@
     <fragment
         android:id="@+id/addPostFragment"
         android:name="com.example.horizon.ui.fragments.AddPostFragment"
-        android:label="AddPostFragment" />
+        android:label="AddPostFragment" >
+        <action
+            android:id="@+id/action_addPostFragment_to_allPostsFragment"
+            app:destination="@id/allPostsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/savedFragment"
         android:name="com.example.horizon.ui.fragments.SavedFragment"

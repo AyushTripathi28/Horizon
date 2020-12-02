@@ -3,6 +3,7 @@ package com.example.horizon.di
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,4 +21,8 @@ object FirebaseModule {
     @Singleton
     @Provides
     fun providesFirebaseFireStore() = Firebase.firestore
+
+    @Singleton
+    @Provides
+    fun providesFirebaseStorage() = Firebase.storage
 }

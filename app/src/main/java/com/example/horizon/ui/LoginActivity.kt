@@ -30,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
         super.onStart()
         val currentUser = viewModel.getCurrentUserViewModel()
         if (currentUser != null){
+            viewModel.getCurrentUserDetailsViewModel(currentUser.uid)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
@@ -64,6 +65,8 @@ class LoginActivity : AppCompatActivity() {
 
                     is LoginResponse.LoginSuccess -> {
                         hideLoading()
+                        val currentUser = viewModel.getCurrentUserViewModel()
+                        viewModel.getCurrentUserDetailsViewModel(currentUser?.uid!!)
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                         finish()

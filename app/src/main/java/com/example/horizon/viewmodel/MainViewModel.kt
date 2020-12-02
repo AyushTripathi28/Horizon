@@ -1,10 +1,12 @@
 package com.example.horizon.viewmodel
 
+import android.net.Uri
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.example.horizon.repository.MainRepository
 import com.example.horizon.response.LoginResponse
+import com.example.horizon.response.PostUploadResponse
 import com.example.horizon.response.SignUpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -16,6 +18,8 @@ class MainViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     fun getCurrentUserViewModel() = repository.getCurrentUserRepository()
+
+    fun getCurrentUserDetailsViewModel(userUid: String) =  repository.getCurrentUserDetailsRepository(userUid)
 
     suspend fun loginUserViewModel(email: String, password: String) = flow {
         emit(LoginResponse.LoginLoading)
@@ -55,6 +59,25 @@ class MainViewModel @ViewModelInject constructor(
                                 is SignUpResponse.SignUpSuccess -> emit(it)
                                 is SignUpResponse.SignUpError -> emit(it)
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun uploadNewPostViewModel(title: String, content: String, imgUri: Uri) = flow<PostUploadResponse> {
+        emit(PostUploadResponse.PostUploadLoading)
+        if (title.isEmpty() or content.isEmpty()){
+            emit(PostUploadResponse.PostUploadError("Title or content can't be left empty"))
+        }else{
+            withContext(Dispatchers.IO){
+                repository.uploadNewPostRepository(imgUri, title, content).collect {
+                    withContext(Dispatchers.Main){
+                        when(it){
+                            is PostUploadResponse.PostUploadSuccess -> emit(it)
+                            is PostUploadResponse.PostUploadLoading -> emit(it)
+                            is PostUploadResponse.PostUploadError -> emit(it)
                         }
                     }
                 }

@@ -53,6 +53,8 @@ class SignUpActivity : AppCompatActivity() {
                     }
                     is SignUpResponse.SignUpSuccess -> {
                         hideLoading()
+                        val currentUser = viewModel.getCurrentUserViewModel()
+                        viewModel.getCurrentUserDetailsViewModel(currentUser?.uid!!)
                         val intent = Intent(this@SignUpActivity, MainActivity::class.java)
                         startActivity(intent)
                         finish()
@@ -66,6 +68,7 @@ class SignUpActivity : AppCompatActivity() {
         val loginSpanString = SpannableString("Already have an account? Login")
         val foregroundColorSpan = ForegroundColorSpan(Color.BLUE)
         loginSpanString.setSpan(foregroundColorSpan, 25, 29, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        viewbinding.tvExistingUser.text = loginSpanString
     }
 
     private fun showLoading(){
