@@ -83,10 +83,11 @@ class MainRepository @Inject constructor(
         val newPostHashMap = HashMap<String, Any>()
         newPostHashMap["title"] = postTitle
         newPostHashMap["content"] = postContent
-        newPostHashMap["img_url"] = imgUrl
+        newPostHashMap["imgUrl"] = imgUrl
         newPostHashMap["author"] = authorName
-        newPostHashMap["author_id"] = currentUserId
-        newPostHashMap["liked_by"] = likedBy
+        newPostHashMap["authorId"] = currentUserId
+        newPostHashMap["likedBy"] = likedBy
+        newPostHashMap["createdAt"] = currentTimeInMillis
 
         allPostCollectionRef.document(imgUrl).set(newPostHashMap, SetOptions.merge()).await()
         emit(PostUploadResponse.PostUploadSuccess("Post uploaded"))
