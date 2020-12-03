@@ -66,18 +66,24 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    suspend fun uploadNewPostViewModel(title: String, content: String, imgUri: Uri) = flow<PostUploadResponse> {
+    suspend fun uploadNewPostViewModel(title: String, content: String, imgUri: Uri?) = flow<PostUploadResponse> {
         emit(PostUploadResponse.PostUploadLoading)
-        if (title.isEmpty() or content.isEmpty()){
-            emit(PostUploadResponse.PostUploadError("Title or content can't be left empty"))
-        }else{
-            withContext(Dispatchers.IO){
-                repository.uploadNewPostRepository(imgUri, title, content).collect {
-                    withContext(Dispatchers.Main){
-                        when(it){
-                            is PostUploadResponse.PostUploadSuccess -> emit(it)
-                            is PostUploadResponse.PostUploadLoading -> emit(it)
-                            is PostUploadResponse.PostUploadError -> emit(it)
+        when {
+            title.isEmpty() or content.isEmpty() -> {
+                emit(PostUploadResponse.PostUploadError("Title or content can't be left empty"))
+            }
+            imgUri == null -> {
+                emit(PostUploadResponse.PostUploadError("Please upload an image"))
+            }
+            else -> {
+                withContext(Dispatchers.IO){
+                    repository.uploadNewPostRepository(imgUri, title, content).collect {
+                        withContext(Dispatchers.Main){
+                            when(it){
+                                is PostUploadResponse.PostUploadSuccess -> emit(it)
+                                is PostUploadResponse.PostUploadLoading -> emit(it)
+                                is PostUploadResponse.PostUploadError -> emit(it)
+                            }
                         }
                     }
                 }

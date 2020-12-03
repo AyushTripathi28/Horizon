@@ -24,7 +24,7 @@ class MainRepository @Inject constructor(
 ) {
 
     private val userCollectionRef = fireStore.collection("Users")
-    private val allPostCollectionRef = fireStore.collection("All_posts")
+    private val allPostCollectionRef = fireStore.collection("AllPosts")
     private val storageRef = storage.reference
 
     fun getCurrentUserRepository() = auth.currentUser
@@ -89,9 +89,11 @@ class MainRepository @Inject constructor(
         newPostHashMap["likedBy"] = likedBy
         newPostHashMap["createdAt"] = currentTimeInMillis
 
-        allPostCollectionRef.document(imgUrl).set(newPostHashMap, SetOptions.merge()).await()
+        val postDocId = imgUrl.replace("/", "-")
+        allPostCollectionRef.document(postDocId).set(newPostHashMap, SetOptions.merge()).await()
         emit(PostUploadResponse.PostUploadSuccess("Post uploaded"))
-    }.catch {
+    }.catch {error ->
+        Log.d("MainRepo", "Image and post update error is : ${error.message}")
         emit(PostUploadResponse.PostUploadError("Something went wrong while uploading"))
     }
 }
