@@ -69,7 +69,6 @@ class AddPostFragment : Fragment(R.layout.fragment_write_blog) {
                     }
                 }
             }
-
         }
     }
 

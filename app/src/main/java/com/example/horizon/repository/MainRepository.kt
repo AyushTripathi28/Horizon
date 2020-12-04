@@ -7,6 +7,7 @@ import com.example.horizon.models.CurrentUser
 import com.example.horizon.response.LoginResponse
 import com.example.horizon.response.PostUploadResponse
 import com.example.horizon.response.SignUpResponse
+import com.example.horizon.utils.AllPostsPagingSource
 import com.example.horizon.utils.CurrentUserDetails
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,7 +21,8 @@ import javax.inject.Inject
 class MainRepository @Inject constructor(
         private val auth: FirebaseAuth,
         fireStore: FirebaseFirestore,
-        storage: FirebaseStorage
+        storage: FirebaseStorage,
+        private val allPostsPagingSource: AllPostsPagingSource
 ) {
 
     private val userCollectionRef = fireStore.collection("Users")
@@ -96,4 +98,6 @@ class MainRepository @Inject constructor(
         Log.d("MainRepo", "Image and post update error is : ${error.message}")
         emit(PostUploadResponse.PostUploadError("Something went wrong while uploading"))
     }
+
+    fun getAllPostsRepository() = allPostsPagingSource
 }

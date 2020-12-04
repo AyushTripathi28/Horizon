@@ -50,7 +50,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-
     //Viewmodel and Livedata
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -62,7 +61,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     //Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
     //Coroutines with firebase
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
@@ -80,5 +79,12 @@ dependencies {
     //Firebase storage
     implementation 'com.google.firebase:firebase-storage-ktx'
 
+    //Paging
+    def paging_version = "3.0.0-alpha10"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    // FirebaseUI for Cloud Firestore
+    implementation 'com.firebaseui:firebase-ui-firestore:7.1.1'
 
+    //Image library Coil
+    implementation "io.coil-kt:coil:1.1.0"
 }

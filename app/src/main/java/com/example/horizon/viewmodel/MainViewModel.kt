@@ -4,6 +4,8 @@ import android.net.Uri
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.example.horizon.repository.MainRepository
 import com.example.horizon.response.LoginResponse
 import com.example.horizon.response.PostUploadResponse
@@ -16,6 +18,11 @@ import kotlinx.coroutines.withContext
 class MainViewModel @ViewModelInject constructor(
         private val repository: MainRepository
 ) : ViewModel() {
+
+    val allPostsLiveData = Pager(PagingConfig(20)){
+        Log.d("AllPostsViewModel", "In pages before calling repo method")
+        repository.getAllPostsRepository()
+    }.flow
 
     fun getCurrentUserViewModel() = repository.getCurrentUserRepository()
 
@@ -66,7 +73,7 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    suspend fun uploadNewPostViewModel(title: String, content: String, imgUri: Uri?) = flow<PostUploadResponse> {
+    suspend fun uploadNewPostViewModel(title: String, content: String, imgUri: Uri?) = flow {
         emit(PostUploadResponse.PostUploadLoading)
         when {
             title.isEmpty() or content.isEmpty() -> {
@@ -90,4 +97,5 @@ class MainViewModel @ViewModelInject constructor(
             }
         }
     }
+
 }

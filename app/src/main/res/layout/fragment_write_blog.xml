@@ -34,7 +34,7 @@
         android:ems="10"
         android:gravity="start|top"
         android:hint="Title of the blog(300 characters)"
-        android:inputType="textMultiLine"
+        android:inputType="textMultiLine|textCapSentences"
         android:maxLength="300"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +50,7 @@
         android:ems="10"
         android:gravity="start|top"
         android:hint="Content of the blog"
-        android:inputType="textMultiLine"
+        android:inputType="textMultiLine|textCapSentences"
         app:layout_constraintBottom_toTopOf="@+id/btnUpload"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +63,10 @@
         android:layout_margin="10dp"
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="?attr/materialButtonOutlinedStyle"
+        app:strokeWidth="5dp"
+        app:strokeColor="@color/purple_500"/>
 
     <Button
         android:id="@+id/btnUpload"
@@ -72,7 +75,10 @@
         android:layout_margin="10dp"
         android:text="Post"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        style="?attr/materialButtonOutlinedStyle"
+        app:strokeWidth="5dp"
+        app:strokeColor="@color/purple_500"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
