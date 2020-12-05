@@ -4,8 +4,11 @@ import android.net.Uri
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.example.horizon.repository.MainRepository
 import com.example.horizon.response.LoginResponse
 import com.example.horizon.response.PostUploadResponse
@@ -20,9 +23,8 @@ class MainViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     val allPostsLiveData = Pager(PagingConfig(20)){
-        Log.d("AllPostsViewModel", "In pages before calling repo method")
         repository.getAllPostsRepository()
-    }.flow
+    }.flow.cachedIn(viewModelScope).asLiveData(viewModelScope.coroutineContext)
 
     fun getCurrentUserViewModel() = repository.getCurrentUserRepository()
 
@@ -97,5 +99,4 @@ class MainViewModel @ViewModelInject constructor(
             }
         }
     }
-
 }

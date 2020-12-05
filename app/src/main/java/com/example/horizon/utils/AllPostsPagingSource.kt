@@ -12,10 +12,9 @@ import java.lang.Exception
 class AllPostsPagingSource(private val postsCollectionReference: CollectionReference) : PagingSource<QuerySnapshot, UploadedPosts>() {
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, UploadedPosts> {
-        Log.d("AllPostFragment", "In load function")
         return try {
             val currentPage = params.key?:postsCollectionReference
-                .limit(20L)
+                .limit(20)
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .get()
                 .await()
@@ -23,13 +22,12 @@ class AllPostsPagingSource(private val postsCollectionReference: CollectionRefer
             val lastDocumentSnapshot = currentPage.documents[currentPage.size() - 1]
 
             val nextPage = postsCollectionReference
-                .limit(20L)
+                .limit(20)
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .startAfter(lastDocumentSnapshot)
                 .get()
                 .await()
 
-            Log.d("AllPostFragment", "Returning success, the result is ${currentPage.toObjects(UploadedPosts::class.java)}")
             LoadResult.Page(
                 currentPage.toObjects(UploadedPosts::class.java),
                 null,

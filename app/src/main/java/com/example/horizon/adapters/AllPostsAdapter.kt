@@ -10,6 +10,7 @@ import coil.load
 import com.example.horizon.R
 import com.example.horizon.databinding.IndividualPostItemBinding
 import com.example.horizon.models.UploadedPosts
+import com.example.horizon.utils.UtilFunctions
 
 class AllPostsAdapter(
     diffUtilCallback: DiffUtil.ItemCallback<UploadedPosts>)
@@ -25,10 +26,15 @@ class AllPostsAdapter(
 
     override fun onBindViewHolder(holder: AllPostsViewHolder, position: Int) {
         val currentPost = getItem(position)
+        val totalClaps = "${currentPost?.likedBy?.size} hearts"
+        val postCreatedDate = UtilFunctions.timeInMillisToDateFormat(currentPost?.createdAt)
+
         holder.viewBinding.apply {
             tvPostTitleAllPosts.text = currentPost?.title
+            tvContentPreviewAllPosts.text = currentPost?.content
             tvAuthorAllPosts.text = currentPost?.author
-            tvPostCreatedAllPosts.text = currentPost?.createdAt.toString()
+            tvPostCreatedAllPosts.text = postCreatedDate
+            tvTotalHeartsAllPosts.text = totalClaps
             ivPostImageAllPosts.load(currentPost?.imgUrl){
                 placeholder(R.drawable.ic_baseline_image_24)
             }
