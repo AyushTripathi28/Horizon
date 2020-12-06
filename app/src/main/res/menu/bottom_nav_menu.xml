@@ -14,7 +14,7 @@
 
     <item
         android:id="@+id/addPostFragment"
-        android:icon="@drawable/ic_write_blog"
+        android:icon="@drawable/ic_write_blog_idea"
         android:title="Write Blog"/>
 
     <item
