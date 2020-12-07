@@ -34,9 +34,7 @@ class AllPostsFragment : Fragment(R.layout.fragment_all_posts) {
         setAdapterProperties()
 
         viewModel.allPostsLiveData.observe(viewLifecycleOwner,{
-            Log.d("AllPostFragment", "Observing start")
             CoroutineScope(Dispatchers.Main).launch {
-                Log.d("AllPostFragment", "Just before submitting, the data is $it")
                 adapter.submitData(it)
             }
         })

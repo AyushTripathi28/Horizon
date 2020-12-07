@@ -9,6 +9,7 @@ import com.example.horizon.response.PostUploadResponse
 import com.example.horizon.response.SignUpResponse
 import com.example.horizon.utils.AllPostsPagingSource
 import com.example.horizon.utils.CurrentUserDetails
+import com.example.horizon.utils.ParticularUserDataSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -22,7 +23,8 @@ class MainRepository @Inject constructor(
         private val auth: FirebaseAuth,
         fireStore: FirebaseFirestore,
         storage: FirebaseStorage,
-        private val allPostsPagingSource: AllPostsPagingSource
+        private val allPostsPagingSource: AllPostsPagingSource,
+        private val particularUserDataSource: ParticularUserDataSource
 ) {
 
     private val userCollectionRef = fireStore.collection("Users")
@@ -100,4 +102,9 @@ class MainRepository @Inject constructor(
     }
 
     fun getAllPostsRepository() = allPostsPagingSource
+
+    fun getParticularUserPostsRepository(userId: String) : ParticularUserDataSource{
+        particularUserDataSource.userId = userId
+        return  particularUserDataSource
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.horizon.di
 
 import com.example.horizon.utils.AllPostsPagingSource
+import com.example.horizon.utils.ParticularUserDataSource
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -31,4 +32,8 @@ object FirebaseModule {
     @Singleton
     @Provides
     fun providesAllPostsPagingSource(firestore: FirebaseFirestore) = AllPostsPagingSource(firestore.collection("AllPosts"))
+
+    @Singleton
+    @Provides
+    fun providesParticularUserPostsPagingSource(firestore: FirebaseFirestore) = ParticularUserDataSource(firestore.collection("AllPosts"))
 }

@@ -12,7 +12,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:nestedScrollingEnabled="false"
         android:padding="10dp">
 
         <LinearLayout
@@ -23,20 +22,20 @@
 
             <ImageView
                 android:id="@+id/ivProfileImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@tools:sample/avatars"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                app:srcCompat="@drawable/default_profile_image"
                 android:layout_gravity="center"/>
 
             <TextView
                 android:id="@+id/tvProfileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Name"
                 android:layout_gravity="center"
-                android:textSize="25sp"
-                android:textAppearance="bold"
-                android:layout_margin="5dp"/>
+                android:layout_margin="5dp"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                tools:text="Name" />
 
             <TextView
                 android:id="@+id/tvProfileBio"
@@ -46,35 +45,55 @@
                 android:textSize="20sp"
                 android:layout_marginTop="5dp"/>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEditProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit Profile"
+                android:layout_marginTop="15dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:textColor="@color/black"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_margin="5dp">
+                android:layout_marginTop="5dp">
 
-                <TextView
-                    android:id="@+id/tvFollowingList"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnProfileFollowing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Following"
-                    android:gravity="center"
                     android:layout_weight="1"
-                    android:textSize="25sp"/>
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:textColor="#595656"
+                    android:layout_marginEnd="5dp"/>
 
-                <TextView
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/tvFollowerList"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Followers"
-                    android:gravity="center"
                     android:layout_weight="1"
-                    android:textSize="25sp"/>
+                    android:layout_marginStart="5dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:textColor="#595656"/>
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvUserPosts"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"/>
+
+            <ProgressBar
+                android:id="@+id/pbUserProfilePosts"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

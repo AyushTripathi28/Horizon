@@ -26,6 +26,10 @@ class MainViewModel @ViewModelInject constructor(
         repository.getAllPostsRepository()
     }.flow.cachedIn(viewModelScope).asLiveData(viewModelScope.coroutineContext)
 
+    fun getParticularUserPostsViewModel(userId: String) = Pager(PagingConfig(20)){
+        repository.getParticularUserPostsRepository(userId)
+    }.flow.cachedIn(viewModelScope).asLiveData(viewModelScope.coroutineContext)
+
     fun getCurrentUserViewModel() = repository.getCurrentUserRepository()
 
     fun getCurrentUserDetailsViewModel(userUid: String) =  repository.getCurrentUserDetailsRepository(userUid)
