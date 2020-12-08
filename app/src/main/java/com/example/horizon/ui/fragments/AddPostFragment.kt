@@ -40,13 +40,17 @@ class AddPostFragment : Fragment(R.layout.fragment_write_blog) {
             startActivityForResult(intent, Constants.GET_IMAGE_REQUEST_CODE)
         }
 
+        viewBinding.ivPostImageNewPost.setOnClickListener {
+
+        }
+
         viewBinding.btnCancel.setOnClickListener {
             if (viewBinding.etTitleNewPost.text.isNotEmpty() ||
                 viewBinding.etContentNewPost.text.isNotEmpty() ||
                 imgUri != null){
                 createCancelDialog()
             }else{
-                findNavController().navigate(R.id.action_addPostFragment_to_allPostsFragment)
+                findNavController().popBackStack()
             }
 
         }

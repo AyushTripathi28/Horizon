@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -41,6 +42,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 adapter.submitData(it)
             }
         })
+
+        viewBinding.btnEditProfile.setOnClickListener {
+            val userProfileBundle = Bundle()
+            userProfileBundle.apply {
+                putString("name", CurrentUserDetails.userName)
+                putString("bio", CurrentUserDetails.userBio)
+                putString("profileImg", CurrentUserDetails.userProfileImgUrl)
+            }
+            findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment, userProfileBundle)
+        }
     }
 
     private fun setupPostsRecyclerView(){
