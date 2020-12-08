@@ -13,6 +13,7 @@ import com.example.horizon.repository.MainRepository
 import com.example.horizon.response.LoginResponse
 import com.example.horizon.response.PostUploadResponse
 import com.example.horizon.response.SignUpResponse
+import com.example.horizon.response.UserDetailsChanged
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -42,11 +43,7 @@ class MainViewModel @ViewModelInject constructor(
             withContext(Dispatchers.IO){
                 repository.loginUserRepository(email, password).collect {
                     withContext(Dispatchers.Main){
-                        when(it){
-                            is LoginResponse.LoginSuccess -> emit(it)
-                            is  LoginResponse.LoginError -> emit(it)
-                            is LoginResponse.LoginLoading -> emit(it)
-                        }
+                        emit(it)
                     }
                 }
             }
@@ -67,11 +64,7 @@ class MainViewModel @ViewModelInject constructor(
                 withContext(Dispatchers.IO){
                     repository.signUpNewUserRepository(name, email, password).collect{
                         withContext(Dispatchers.Main){
-                            when(it){
-                                is SignUpResponse.SignUpLoading -> emit(it)
-                                is SignUpResponse.SignUpSuccess -> emit(it)
-                                is SignUpResponse.SignUpError -> emit(it)
-                            }
+                            emit(it)
                         }
                     }
                 }
@@ -92,12 +85,23 @@ class MainViewModel @ViewModelInject constructor(
                 withContext(Dispatchers.IO){
                     repository.uploadNewPostRepository(imgUri, title, content).collect {
                         withContext(Dispatchers.Main){
-                            when(it){
-                                is PostUploadResponse.PostUploadSuccess -> emit(it)
-                                is PostUploadResponse.PostUploadLoading -> emit(it)
-                                is PostUploadResponse.PostUploadError -> emit(it)
-                            }
+                            emit(it)
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun changeUserProfileViewModel(newName: String, newBio: String, imageUri: Uri?, removeProfileImgMsg:String) = flow {
+        emit(UserDetailsChanged.ChangeLoading)
+        if (newName.isEmpty()){
+            emit(UserDetailsChanged.ChangeError("Name cannot be left empty"))
+        }else{
+            withContext(Dispatchers.IO){
+                repository.changeUserProfileRepository(newName, newBio, imageUri, removeProfileImgMsg).collect{
+                    withContext(Dispatchers.Main){
+                        emit(it)
                     }
                 }
             }

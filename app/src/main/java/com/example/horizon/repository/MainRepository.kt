@@ -7,6 +7,7 @@ import com.example.horizon.models.CurrentUser
 import com.example.horizon.response.LoginResponse
 import com.example.horizon.response.PostUploadResponse
 import com.example.horizon.response.SignUpResponse
+import com.example.horizon.response.UserDetailsChanged
 import com.example.horizon.utils.AllPostsPagingSource
 import com.example.horizon.utils.CurrentUserDetails
 import com.example.horizon.utils.ParticularUserDataSource
@@ -106,5 +107,36 @@ class MainRepository @Inject constructor(
     fun getParticularUserPostsRepository(userId: String) : ParticularUserDataSource{
         particularUserDataSource.userId = userId
         return  particularUserDataSource
+    }
+
+    suspend fun changeUserProfileRepository(newName: String, newBio: String, newImage: Uri?, removeProfileImgMsg: String) = flow<UserDetailsChanged> {
+        val oldName = CurrentUserDetails.userName
+        val oldBio = CurrentUserDetails.userBio
+        val detailsChangedHashMap = HashMap<String, String>()
+        if (oldName!=newName){
+            detailsChangedHashMap["name"] = newName
+        }
+        if (oldBio!=newBio){
+            detailsChangedHashMap["bio"] = newBio
+        }
+
+        newImage?.let {
+            val storageRefChild = storageRef.child("${CurrentUserDetails.userUid}.jpg")
+            storageRefChild.putFile(it).await()
+            val imageDownloadUrl = storageRefChild.downloadUrl.await().toString()
+            detailsChangedHashMap["imageUrl"] = imageDownloadUrl
+        }
+
+        if (removeProfileImgMsg == "remove"){
+            detailsChangedHashMap["imageUrl"] = ""
+            storageRef.child("${CurrentUserDetails.userUid}.jpg").delete().await()
+        }
+
+        userCollectionRef.document(CurrentUserDetails.userUid).set(detailsChangedHashMap, SetOptions.merge()).await()
+        getCurrentUserDetailsRepository(CurrentUserDetails.userUid)
+        emit(UserDetailsChanged.ChangeSuccessful("Details changed"))
+    }.catch {e ->
+        Log.d("MainRepo", "Changing profile details error: ${e.localizedMessage}")
+        emit(UserDetailsChanged.ChangeError("Something went wrong"))
     }
 }

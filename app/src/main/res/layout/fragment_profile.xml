@@ -24,8 +24,9 @@
                 android:id="@+id/ivProfileImage"
                 android:layout_width="125dp"
                 android:layout_height="125dp"
-                app:srcCompat="@drawable/default_profile_image"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/default_profile_image" />
 
             <TextView
                 android:id="@+id/tvProfileName"
@@ -33,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:textColor="#000000"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 tools:text="Name" />
@@ -41,9 +43,9 @@
                 android:id="@+id/tvProfileBio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="Hey bro this is my cool bio!!! Suck my dick. You listening!!"
-                android:textSize="20sp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp"
+                android:textSize="18sp"
+                tools:text="Hey bro this is my cool bio!!! Suck my dick. You listening!!" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditProfile"

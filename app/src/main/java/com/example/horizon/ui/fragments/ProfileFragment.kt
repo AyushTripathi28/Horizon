@@ -78,6 +78,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             if (CurrentUserDetails.userProfileImgUrl != ""){
                 ivProfileImage.load(CurrentUserDetails.userProfileImgUrl){
                     transformations(CircleCropTransformation())
+                    placeholder(R.drawable.default_profile_image)
                 }
             }else{
                 ivProfileImage.load(R.drawable.default_profile_image){
