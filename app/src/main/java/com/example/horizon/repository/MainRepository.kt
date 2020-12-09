@@ -133,7 +133,6 @@ class MainRepository @Inject constructor(
         }
 
         userCollectionRef.document(CurrentUserDetails.userUid).set(detailsChangedHashMap, SetOptions.merge()).await()
-        getCurrentUserDetailsRepository(CurrentUserDetails.userUid)
         emit(UserDetailsChanged.ChangeSuccessful("Details changed"))
     }.catch {e ->
         Log.d("MainRepo", "Changing profile details error: ${e.localizedMessage}")

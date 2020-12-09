@@ -18,6 +18,8 @@ import com.example.horizon.response.UserDetailsChanged
 import com.example.horizon.utils.Constants
 import com.example.horizon.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -84,11 +86,25 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constants.GET_PROFILE_IMAGE_CODE && resultCode == RESULT_OK){
-            imageUri = data?.data
-            viewBinding.ivProfileImageEdit.load(imageUri){
-                transformations(CircleCropTransformation())
+            data?.data?.let {
+                cropProfileImage(it)
+            }
+
+        }else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK){
+            imageUri = CropImage.getActivityResult(data).uri
+            imageUri?.let {
+                viewBinding.ivProfileImageEdit.load(imageUri){
+                    transformations(CircleCropTransformation())
+                }
             }
         }
+    }
+
+    private fun cropProfileImage(uri: Uri){
+        CropImage.activity(uri)
+            .setGuidelines(CropImageView.Guidelines.ON)
+            .setAspectRatio(4,4)
+            .start(requireContext(), this)
     }
 
     private fun changeUserProfile(view: View){
