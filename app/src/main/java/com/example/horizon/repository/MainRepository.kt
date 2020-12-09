@@ -4,10 +4,8 @@ package com.example.horizon.repository
 import android.net.Uri
 import android.util.Log
 import com.example.horizon.models.CurrentUser
-import com.example.horizon.response.LoginResponse
-import com.example.horizon.response.PostUploadResponse
-import com.example.horizon.response.SignUpResponse
-import com.example.horizon.response.UserDetailsChanged
+import com.example.horizon.models.UploadedPosts
+import com.example.horizon.response.*
 import com.example.horizon.utils.AllPostsPagingSource
 import com.example.horizon.utils.CurrentUserDetails
 import com.example.horizon.utils.ParticularUserDataSource
@@ -100,6 +98,14 @@ class MainRepository @Inject constructor(
     }.catch {error ->
         Log.d("MainRepo", "Image and post update error is : ${error.message}")
         emit(PostUploadResponse.PostUploadError("Something went wrong while uploading"))
+    }
+
+    suspend fun getPostRepository(postId: String) = flow<PostRetrieveResponse> {
+        val post = allPostCollectionRef.document(postId).get().await().toObject(UploadedPosts::class.java)
+        emit(PostRetrieveResponse.PostRetrieveSuccessful(post!!))
+    }.catch {error ->
+        Log.d("MainRepo", "getPostRepository error: ${error.localizedMessage}")
+        emit(PostRetrieveResponse.PostRetrieveError("Something went wrong"))
     }
 
     fun getAllPostsRepository() = allPostsPagingSource

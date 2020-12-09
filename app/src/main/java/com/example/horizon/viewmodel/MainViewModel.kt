@@ -10,10 +10,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.example.horizon.repository.MainRepository
-import com.example.horizon.response.LoginResponse
-import com.example.horizon.response.PostUploadResponse
-import com.example.horizon.response.SignUpResponse
-import com.example.horizon.response.UserDetailsChanged
+import com.example.horizon.response.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -103,6 +101,16 @@ class MainViewModel @ViewModelInject constructor(
                     withContext(Dispatchers.Main){
                         emit(it)
                     }
+                }
+            }
+        }
+    }
+
+    suspend fun getPostViewModel(postId: String) = flow {
+        withContext(Dispatchers.IO){
+            repository.getPostRepository(postId).collect {
+                withContext(Dispatchers.Main){
+                    emit(it)
                 }
             }
         }

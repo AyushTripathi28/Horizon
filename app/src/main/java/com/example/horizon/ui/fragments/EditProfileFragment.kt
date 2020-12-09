@@ -52,6 +52,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
                 ivProfileImageEdit.load(R.drawable.default_profile_image){
                     transformations(CircleCropTransformation())
                 }
+                btnRemoveProfileImgEdit.visibility = View.GONE
             }
             etNameProfileEdit.setText(userName)
             etBioProfileEdit.setText(userBio)
@@ -68,6 +69,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         viewBinding.btnRemoveProfileImgEdit.setOnClickListener {
             imageUri = null
             removeProfileImgMsg = "remove"
+            it.visibility = View.GONE
             viewBinding.ivProfileImageEdit.load(R.drawable.default_profile_image){
                 transformations(CircleCropTransformation())
             }
@@ -96,6 +98,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
                 viewBinding.ivProfileImageEdit.load(imageUri){
                     transformations(CircleCropTransformation())
                 }
+                viewBinding.btnRemoveProfileImgEdit.visibility = View.VISIBLE
             }
         }
     }
