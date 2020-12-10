@@ -6,7 +6,11 @@
     <fragment
         android:id="@+id/allPostsFragment"
         android:name="com.example.horizon.ui.fragments.AllPostsFragment"
-        android:label="AllPostsFragment" />
+        android:label="AllPostsFragment" >
+        <action
+            android:id="@+id/action_allPostsFragment_to_readPostFragment"
+            app:destination="@id/readPostFragment" />
+    </fragment>
     <fragment
         android:id="@+id/exploreFragment"
         android:name="com.example.horizon.ui.fragments.ExploreFragment"
@@ -26,9 +30,16 @@
         <action
             android:id="@+id/action_profileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_readPostFragment"
+            app:destination="@id/readPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.horizon.ui.fragments.EditProfileFragment"
         android:label="EditProfileFragment" />
+    <fragment
+        android:id="@+id/readPostFragment"
+        android:name="com.example.horizon.ui.fragments.ReadPostFragment"
+        android:label="ReadPostFragment" />
 </navigation>

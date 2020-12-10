@@ -1,6 +1,5 @@
 package com.example.horizon.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -13,7 +12,8 @@ import com.example.horizon.models.UploadedPosts
 import com.example.horizon.utils.UtilFunctions
 
 class AllPostsAdapter(
-    diffUtilCallback: DiffUtil.ItemCallback<UploadedPosts>)
+    diffUtilCallback: DiffUtil.ItemCallback<UploadedPosts>,
+    private val listener: OnPostItemClicked)
     : PagingDataAdapter<UploadedPosts, AllPostsAdapter.AllPostsViewHolder>(diffUtilCallback) {
 
     class AllPostsViewHolder(val viewBinding: IndividualPostItemBinding) : RecyclerView.ViewHolder(viewBinding.root)
@@ -26,7 +26,7 @@ class AllPostsAdapter(
 
     override fun onBindViewHolder(holder: AllPostsViewHolder, position: Int) {
         val currentPost = getItem(position)
-        val totalClaps = "${currentPost?.likedBy?.size} hearts"
+        val totalHearts = "${currentPost?.likedBy?.size} hearts"
         val postCreatedDate = UtilFunctions.timeInMillisToDateFormat(currentPost?.createdAt)
 
         holder.viewBinding.apply {
@@ -34,12 +34,20 @@ class AllPostsAdapter(
             tvContentPreviewAllPosts.text = currentPost?.content
             tvAuthorAllPosts.text = currentPost?.author
             tvPostCreatedAllPosts.text = postCreatedDate
-            tvTotalHeartsAllPosts.text = totalClaps
+            tvTotalHeartsAllPosts.text = totalHearts
             ivPostImageAllPosts.load(currentPost?.imgUrl){
                 placeholder(R.drawable.ic_baseline_image_24)
             }
         }
 
-        Log.d("AllPostFragment", "On bind func, title is: ${getItem(position)?.title}")
+        holder.itemView.setOnClickListener {
+            currentPost?.imgUrl?.let {
+                listener.onPostItemClicked(it)
+            }
+        }
+    }
+
+    interface OnPostItemClicked{
+        fun onPostItemClicked(postUrl: String)
     }
 }

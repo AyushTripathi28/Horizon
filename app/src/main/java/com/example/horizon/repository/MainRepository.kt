@@ -140,6 +140,14 @@ class MainRepository @Inject constructor(
 
         userCollectionRef.document(CurrentUserDetails.userUid).set(detailsChangedHashMap, SetOptions.merge()).await()
         emit(UserDetailsChanged.ChangeSuccessful("Details changed"))
+        if (newName != oldName){
+            val allPostsOfAuthor = allPostCollectionRef.whereEqualTo("authorId", CurrentUserDetails.userUid).get().await()
+            for(posts in allPostsOfAuthor.documents){
+                val postDocumentId = posts.id
+                allPostCollectionRef.document(postDocumentId).set(hashMapOf(Pair("author", newName)), SetOptions.merge())
+            }
+        }
+
     }.catch {e ->
         Log.d("MainRepo", "Changing profile details error: ${e.localizedMessage}")
         emit(UserDetailsChanged.ChangeError("Something went wrong"))

@@ -23,11 +23,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment(R.layout.fragment_profile) {
+class ProfileFragment : Fragment(R.layout.fragment_profile), AllPostsAdapter.OnPostItemClicked {
 
     private lateinit var viewBinding: FragmentProfileBinding
     private val viewModel: MainViewModel by viewModels()
-    private val adapter by lazy { AllPostsAdapter(DifferCallBack()) }
+    private val adapter by lazy { AllPostsAdapter(DifferCallBack(), this) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,5 +86,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 }
             }
         }
+    }
+
+    override fun onPostItemClicked(postUrl: String) {
+        val bundle = Bundle()
+        val postId = postUrl.replace("/", "-")
+        bundle.putString("postId", postId)
+
+        findNavController().navigate(R.id.action_profileFragment_to_readPostFragment, bundle)
     }
 }

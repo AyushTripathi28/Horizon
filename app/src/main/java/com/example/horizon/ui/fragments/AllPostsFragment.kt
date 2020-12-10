@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.horizon.R
@@ -19,11 +20,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AllPostsFragment : Fragment(R.layout.fragment_all_posts) {
+class AllPostsFragment : Fragment(R.layout.fragment_all_posts), AllPostsAdapter.OnPostItemClicked {
 
     private lateinit var viewBinding: FragmentAllPostsBinding
     private val viewModel: MainViewModel by viewModels()
-    private val adapter by lazy { AllPostsAdapter(DifferCallBack()) }
+    private val adapter by lazy { AllPostsAdapter(DifferCallBack(), this) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,4 +68,11 @@ class AllPostsFragment : Fragment(R.layout.fragment_all_posts) {
         viewBinding.pbAllPosts.visibility = View.GONE
     }
 
+    override fun onPostItemClicked(postUrl: String) {
+        val bundle = Bundle()
+        val postId = postUrl.replace("/", "-")
+        bundle.putString("postId", postId)
+
+        findNavController().navigate(R.id.action_allPostsFragment_to_readPostFragment, bundle)
+    }
 }

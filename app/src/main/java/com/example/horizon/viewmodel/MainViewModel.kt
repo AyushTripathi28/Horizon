@@ -11,7 +11,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.example.horizon.repository.MainRepository
 import com.example.horizon.response.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow

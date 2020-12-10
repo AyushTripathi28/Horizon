@@ -40,10 +40,6 @@ class AddPostFragment : Fragment(R.layout.fragment_write_blog) {
             startActivityForResult(intent, Constants.GET_IMAGE_REQUEST_CODE)
         }
 
-        viewBinding.ivPostImageNewPost.setOnClickListener {
-
-        }
-
         viewBinding.btnCancel.setOnClickListener {
             if (viewBinding.etTitleNewPost.text.isNotEmpty() ||
                 viewBinding.etContentNewPost.text.isNotEmpty() ||
