@@ -11,9 +11,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.example.horizon.repository.MainRepository
 import com.example.horizon.response.*
+import com.example.horizon.utils.CurrentUserDetails
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainViewModel @ViewModelInject constructor(
@@ -112,6 +114,16 @@ class MainViewModel @ViewModelInject constructor(
                     emit(it)
                 }
             }
+        }
+    }
+
+    fun likeDislikePostViewModel(postId: String, likeDislikeList: ArrayList<String>) = viewModelScope.launch{
+        if (likeDislikeList.contains(CurrentUserDetails.userUid)){
+            likeDislikeList.remove(CurrentUserDetails.userUid)
+            repository.likeDislikePostRepository(postId, likeDislikeList)
+        }else{
+            likeDislikeList.add(CurrentUserDetails.userUid)
+            repository.likeDislikePostRepository(postId,  likeDislikeList)
         }
     }
 }

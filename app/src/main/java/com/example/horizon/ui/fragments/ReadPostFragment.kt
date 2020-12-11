@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import coil.load
 import com.example.horizon.R
 import com.example.horizon.databinding.FragmentReadPostBinding
+import com.example.horizon.models.UploadedPosts
 import com.example.horizon.response.PostRetrieveResponse
 import com.example.horizon.utils.CurrentUserDetails
 import com.example.horizon.utils.UtilFunctions
@@ -34,20 +35,7 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
                 when(it){
                     is PostRetrieveResponse.PostRetrieveSuccessful -> {
                         hideLoading()
-                        viewBinding.apply {
-                            tvTitleBlog.text = it.post.title
-                            tvAuthorNameBlog.text = it.post.author
-                            ivImageBlog.load(it.post.imgUrl) {
-                                placeholder(R.drawable.ic_baseline_image_24)
-                            }
-                            tvCreatedAtBlog.text = UtilFunctions.timeInMillisToDateFormat(it.post.createdAt)
-                            tvContentBlog.text = it.post.content
-                            val totalLikes = "${ it.post.likedBy.size } hearts"
-                            cbLikedBlog.text = totalLikes
-                            if (it.post.likedBy.contains(CurrentUserDetails.userUid)) {
-                                cbLikedBlog.isChecked = true
-                            }
-                        }
+                        displayPost(it.post)
                     }
                     is PostRetrieveResponse.PostRetrieveError -> {
                         hideLoading()
@@ -59,6 +47,38 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
         }
 
 
+    }
+
+    private fun displayPost(post: UploadedPosts){
+        viewBinding.apply {
+            tvTitleBlog.text = post.title
+            tvAuthorNameBlog.text = post.author
+            ivImageBlog.load(post.imgUrl) {
+                placeholder(R.drawable.ic_baseline_image_24)
+            }
+            tvCreatedAtBlog.text = UtilFunctions.timeInMillisToDateFormat(post.createdAt)
+            tvContentBlog.text = post.content
+            val totalLikes = "${ post.likedBy.size } hearts"
+            cbLikedBlog.text = totalLikes
+            if (post.likedBy.contains(CurrentUserDetails.userUid)) {
+                cbLikedBlog.isChecked = true
+            }
+            decideLikedOrDisliked(post.imgUrl.replace("/", "-"), post.likedBy)
+        }
+    }
+
+    private fun decideLikedOrDisliked(postId: String, likedByList: ArrayList<String>){
+        viewBinding.cbLikedBlog.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                val totalLikes = "${likedByList.size + 1} hearts"
+                buttonView.text = totalLikes
+                viewModel.likeDislikePostViewModel(postId, likedByList)
+            }else{
+                val totalLikes = "${likedByList.size - 1} hearts"
+                buttonView.text = totalLikes
+                viewModel.likeDislikePostViewModel(postId, likedByList)
+            }
+        }
     }
 
     private fun showLoading(){

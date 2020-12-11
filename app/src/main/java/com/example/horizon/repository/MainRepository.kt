@@ -13,9 +13,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(
@@ -103,9 +106,20 @@ class MainRepository @Inject constructor(
     suspend fun getPostRepository(postId: String) = flow<PostRetrieveResponse> {
         val post = allPostCollectionRef.document(postId).get().await().toObject(UploadedPosts::class.java)
         emit(PostRetrieveResponse.PostRetrieveSuccessful(post!!))
+
     }.catch {error ->
         Log.d("MainRepo", "getPostRepository error: ${error.localizedMessage}")
         emit(PostRetrieveResponse.PostRetrieveError("Something went wrong"))
+    }
+
+    suspend fun likeDislikePostRepository(postId: String, newLikeOrDislikeList: ArrayList<String>){
+        withContext(Dispatchers.IO){
+            try {
+                allPostCollectionRef.document(postId).set(hashMapOf(Pair("likedBy", newLikeOrDislikeList)), SetOptions.merge()).await()
+            }catch (e: Exception){
+                Log.d("MainRepo", "Liking disliking catch block: ${e.localizedMessage}")
+            }
+        }
     }
 
     fun getAllPostsRepository() = allPostsPagingSource
