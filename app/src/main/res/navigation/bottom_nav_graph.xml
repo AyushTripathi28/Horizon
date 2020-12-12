@@ -41,5 +41,20 @@
     <fragment
         android:id="@+id/readPostFragment"
         android:name="com.example.horizon.ui.fragments.ReadPostFragment"
-        android:label="ReadPostFragment" />
+        android:label="ReadPostFragment" >
+        <action
+            android:id="@+id/action_readPostFragment_to_anotherUserFragment"
+            app:destination="@id/anotherUserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/anotherUserFragment"
+        android:name="com.example.horizon.ui.fragments.AnotherUserFragment"
+        android:label="AnotherUserFragment" >
+        <action
+            android:id="@+id/action_anotherUserFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_anotherUserFragment_to_readPostFragment"
+            app:destination="@id/readPostFragment" />
+    </fragment>
 </navigation>

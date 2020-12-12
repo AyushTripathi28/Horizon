@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.example.horizon.R
 import com.example.horizon.databinding.FragmentReadPostBinding
@@ -24,6 +25,7 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
 
     private lateinit var viewBinding: FragmentReadPostBinding
     private val viewModel: MainViewModel by viewModels()
+    private var authorId = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,7 +37,7 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
                 when(it){
                     is PostRetrieveResponse.PostRetrieveSuccessful -> {
                         hideLoading()
-                        displayPost(it.post)
+                        authorId = it.post.authorId
                     }
                     is PostRetrieveResponse.PostRetrieveError -> {
                         hideLoading()
@@ -45,8 +47,16 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
                 }
             }
         }
+        viewModel.post.observe(viewLifecycleOwner, {
+            displayPost(it)
+        })
 
-
+        viewBinding.tvAuthorNameBlog.setOnClickListener {
+            val bundle = Bundle().apply {
+                putString("authorId", authorId)
+            }
+            findNavController().navigate(R.id.action_readPostFragment_to_anotherUserFragment, bundle)
+        }
     }
 
     private fun displayPost(post: UploadedPosts){

@@ -3,12 +3,12 @@ package com.example.horizon.viewmodel
 import android.net.Uri
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import com.example.horizon.models.CurrentUser
+import com.example.horizon.models.UploadedPosts
 import com.example.horizon.repository.MainRepository
 import com.example.horizon.response.*
 import com.example.horizon.utils.CurrentUserDetails
@@ -21,6 +21,14 @@ import kotlinx.coroutines.withContext
 class MainViewModel @ViewModelInject constructor(
         private val repository: MainRepository
 ) : ViewModel() {
+
+    private val _post = MutableLiveData<UploadedPosts>()
+    val post : LiveData<UploadedPosts>
+        get() = _post
+
+    private val _userProfile = MutableLiveData<CurrentUser>()
+    val userprofile: LiveData<CurrentUser>
+        get() = _userProfile
 
     val allPostsLiveData = Pager(PagingConfig(20)){
         repository.getAllPostsRepository()
@@ -111,7 +119,14 @@ class MainViewModel @ViewModelInject constructor(
         withContext(Dispatchers.IO){
             repository.getPostRepository(postId).collect {
                 withContext(Dispatchers.Main){
-                    emit(it)
+                    when(it){
+                        is PostRetrieveResponse.PostRetrieveSuccessful -> {
+                            _post.value = it.post
+                            emit(it)
+                        }
+                        is PostRetrieveResponse.PostRetrieveError -> emit(it)
+                        is PostRetrieveResponse.PostRetrieveLoading -> emit(it)
+                    }
                 }
             }
         }
@@ -124,6 +139,24 @@ class MainViewModel @ViewModelInject constructor(
         }else{
             likeDislikeList.add(CurrentUserDetails.userUid)
             repository.likeDislikePostRepository(postId,  likeDislikeList)
+        }
+    }
+
+    fun getAnotherUserDetailsViewModel(userId: String) = flow {
+        emit(UserDetailsResponse.LoadingUserDetails)
+        withContext(Dispatchers.IO){
+            repository.getAnotherUserDetailsRepository(userId).collect{
+                withContext(Dispatchers.Main){
+                    when(it){
+                        is UserDetailsResponse.SuccessUserDetails -> {
+                            _userProfile.value = it.userDetails
+                            emit(it)
+                        }
+                        is UserDetailsResponse.ErrorUserDetails -> emit(it)
+                        is UserDetailsResponse.LoadingUserDetails -> emit(it)
+                    }
+                }
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.horizon.repository
 
-
 import android.net.Uri
 import android.util.Log
 import com.example.horizon.models.CurrentUser
@@ -104,6 +103,7 @@ class MainRepository @Inject constructor(
     }
 
     suspend fun getPostRepository(postId: String) = flow<PostRetrieveResponse> {
+        Log.d("MainRepo", "Post retrieved")
         val post = allPostCollectionRef.document(postId).get().await().toObject(UploadedPosts::class.java)
         emit(PostRetrieveResponse.PostRetrieveSuccessful(post!!))
 
@@ -166,4 +166,12 @@ class MainRepository @Inject constructor(
         Log.d("MainRepo", "Changing profile details error: ${e.localizedMessage}")
         emit(UserDetailsChanged.ChangeError("Something went wrong"))
     }
+
+    suspend fun getAnotherUserDetailsRepository(userId: String) = flow<UserDetailsResponse> {
+        val userDetails = userCollectionRef.document(userId).get().await().toObject(CurrentUser::class.java)
+        emit(UserDetailsResponse.SuccessUserDetails(userDetails))
+    }.catch {
+        emit(UserDetailsResponse.ErrorUserDetails("Something went wrong"))
+    }
+
 }

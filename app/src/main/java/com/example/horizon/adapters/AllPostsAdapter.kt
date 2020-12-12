@@ -12,8 +12,8 @@ import com.example.horizon.models.UploadedPosts
 import com.example.horizon.utils.UtilFunctions
 
 class AllPostsAdapter(
-    diffUtilCallback: DiffUtil.ItemCallback<UploadedPosts>,
-    private val listener: OnPostItemClicked)
+        diffUtilCallback: DiffUtil.ItemCallback<UploadedPosts>,
+        private val listener: OnPostItemClicked)
     : PagingDataAdapter<UploadedPosts, AllPostsAdapter.AllPostsViewHolder>(diffUtilCallback) {
 
     class AllPostsViewHolder(val viewBinding: IndividualPostItemBinding) : RecyclerView.ViewHolder(viewBinding.root)
