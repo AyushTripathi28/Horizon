@@ -79,6 +79,8 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
+    fun signOutCurrentUserViewModel() = repository.signOutCurrentUserRepository()
+
     suspend fun uploadNewPostViewModel(title: String, content: String, imgUri: Uri?) = flow {
         emit(PostUploadResponse.PostUploadLoading)
         when {

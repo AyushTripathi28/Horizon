@@ -1,5 +1,6 @@
 package com.example.horizon.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.ViewCompat
@@ -8,13 +9,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.horizon.R
 import com.example.horizon.adapters.AllPostsAdapter
 import com.example.horizon.adapters.FooterAdapter
 import com.example.horizon.databinding.FragmentProfileBinding
+import com.example.horizon.ui.LoginActivity
 import com.example.horizon.utils.CurrentUserDetails
 import com.example.horizon.utils.DifferCallBack
 import com.example.horizon.viewmodel.MainViewModel
@@ -52,6 +53,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile), AllPostsAdapter.OnP
                 putString("profileImg", CurrentUserDetails.userProfileImgUrl)
             }
             findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment, userProfileBundle)
+        }
+
+        viewBinding.btnProfileSignOut.setOnClickListener {
+            viewModel.signOutCurrentUserViewModel()
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
         }
     }
 

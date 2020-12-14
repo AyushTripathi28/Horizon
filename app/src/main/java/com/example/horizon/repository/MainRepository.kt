@@ -75,6 +75,8 @@ class MainRepository @Inject constructor(
         emit(SignUpResponse.SignUpError("Something went wrong"))
     }
 
+    fun signOutCurrentUserRepository() = auth.signOut()
+
     suspend fun uploadNewPostRepository(imgUri: Uri, postTitle: String, postContent: String) = flow<PostUploadResponse> {
         val currentUserId = CurrentUserDetails.userUid
         val authorName = CurrentUserDetails.userName

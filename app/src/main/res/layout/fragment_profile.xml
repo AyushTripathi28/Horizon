@@ -21,6 +21,16 @@
             android:orientation="vertical"
             android:padding="5dp">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnProfileSignOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Out"
+                android:layout_gravity="end"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:strokeWidth="3dp"
+                app:strokeColor="@color/purple_500"/>
+
             <ImageView
                 android:id="@+id/ivProfileImage"
                 android:layout_width="125dp"
