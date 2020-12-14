@@ -174,4 +174,14 @@ class MainRepository @Inject constructor(
         emit(UserDetailsResponse.ErrorUserDetails("Something went wrong"))
     }
 
+    suspend fun deleteBlogRepository(imgUrl: String) = flow<DeleteBlogResponse>{
+        val postId = imgUrl.replace("/", "-")
+
+        allPostCollectionRef.document(postId).delete().await()
+        storageRef.storage.getReferenceFromUrl(imgUrl).delete().await()
+        emit(DeleteBlogResponse.DeleteBlogSuccess("Blog deleted"))
+    }.catch { error ->
+        emit(DeleteBlogResponse.DeleteBlogError("Something went wrong. ${error.localizedMessage}"))
+    }
+
 }

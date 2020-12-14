@@ -159,4 +159,15 @@ class MainViewModel @ViewModelInject constructor(
             }
         }
     }
+
+    suspend fun deleteBlogRepository(imgUrl: String) = flow{
+        emit(DeleteBlogResponse.DeleteBlogLoading)
+        withContext(Dispatchers.IO){
+            repository.deleteBlogRepository(imgUrl).collect {
+                withContext(Dispatchers.Main){
+                    emit(it)
+                }
+            }
+        }
+    }
 }

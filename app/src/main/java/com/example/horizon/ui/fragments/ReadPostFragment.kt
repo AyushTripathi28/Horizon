@@ -1,7 +1,9 @@
 package com.example.horizon.ui.fragments
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -9,6 +11,7 @@ import coil.load
 import com.example.horizon.R
 import com.example.horizon.databinding.FragmentReadPostBinding
 import com.example.horizon.models.UploadedPosts
+import com.example.horizon.response.DeleteBlogResponse
 import com.example.horizon.response.PostRetrieveResponse
 import com.example.horizon.utils.CurrentUserDetails
 import com.example.horizon.utils.UtilFunctions
@@ -26,6 +29,7 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
     private lateinit var viewBinding: FragmentReadPostBinding
     private val viewModel: MainViewModel by viewModels()
     private var authorId = ""
+    private var imgUrl: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,9 +61,14 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
             }
             findNavController().navigate(R.id.action_readPostFragment_to_anotherUserFragment, bundle)
         }
+
+        viewBinding.tvDeleteBlog.setOnClickListener {
+            deleteBlogDialog()
+        }
     }
 
     private fun displayPost(post: UploadedPosts){
+        imgUrl = post.imgUrl
         viewBinding.apply {
             tvTitleBlog.text = post.title
             tvAuthorNameBlog.text = post.author
@@ -68,6 +77,11 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
             }
             tvCreatedAtBlog.text = UtilFunctions.timeInMillisToDateFormat(post.createdAt)
             tvContentBlog.text = post.content
+            if (post.authorId == CurrentUserDetails.userUid){
+                this.tvDeleteBlog.visibility = View.VISIBLE
+            }else{
+                this.tvDeleteBlog.visibility = View.GONE
+            }
             val totalLikes = "${ post.likedBy.size } hearts"
             cbLikedBlog.text = totalLikes
             if (post.likedBy.contains(CurrentUserDetails.userUid)) {
@@ -87,6 +101,41 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
                 val totalLikes = "${likedByList.size - 1} hearts"
                 buttonView.text = totalLikes
                 viewModel.likeDislikePostViewModel(postId, likedByList)
+            }
+        }
+    }
+
+    private fun deleteBlogDialog(){
+        AlertDialog.Builder(requireContext())
+                .setTitle("Delete blog?")
+                .setMessage("Are you sure want to delete the blog?")
+                .setNegativeButton("No"){dialogInterface: DialogInterface, _ ->
+                        dialogInterface.dismiss()
+                }
+                .setPositiveButton("Yes"){_, _ ->
+                    imgUrl?.let {
+                        deleteBlog(it)
+                    }
+                }
+                .create()
+                .show()
+    }
+
+    private fun deleteBlog(imgUrl: String){
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel.deleteBlogRepository(imgUrl).collect {
+                when(it){
+                    is DeleteBlogResponse.DeleteBlogLoading -> showLoading()
+                    is DeleteBlogResponse.DeleteBlogSuccess ->{
+                        hideLoading()
+                        Snackbar.make(requireView(), "Blog deleted", Snackbar.LENGTH_SHORT).show()
+                        findNavController().popBackStack()
+                    }
+                    is DeleteBlogResponse.DeleteBlogError -> {
+                        hideLoading()
+                        Snackbar.make(requireView(), it.errorMsg, Snackbar.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }
