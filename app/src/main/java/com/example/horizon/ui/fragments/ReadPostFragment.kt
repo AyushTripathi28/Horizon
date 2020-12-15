@@ -65,6 +65,15 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
         viewBinding.tvDeleteBlog.setOnClickListener {
             deleteBlogDialog()
         }
+
+        viewBinding.tvComment.setOnClickListener {
+            imgUrl?.let {
+                val bundle = Bundle().apply {
+                    putString("imgUrl", it)
+                }
+                findNavController().navigate(R.id.action_readPostFragment_to_commentsFragment, bundle)
+            }
+        }
     }
 
     private fun displayPost(post: UploadedPosts){

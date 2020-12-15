@@ -78,13 +78,12 @@
             android:id="@+id/tvSaveBlog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:drawableStart="@drawable/ic_saved"
             android:text="Save"
+            android:layout_marginStart="5dp"
             android:textColor="@color/black"
             app:drawableStartCompat="@drawable/ic_saved"
             app:layout_constraintBaseline_toBaselineOf="@id/cbLikedBlog"
-            app:layout_constraintStart_toEndOf="@id/cbLikedBlog" />
+            app:layout_constraintStart_toEndOf="@+id/tvComment" />
 
         <ProgressBar
             android:id="@+id/pbBlog"
@@ -100,12 +99,26 @@
             android:id="@+id/tvDeleteBlog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_delete"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBaseline_toBaselineOf="@id/cbLikedBlog"
             tools:layout_editor_absoluteX="317dp"
-            tools:layout_editor_absoluteY="360dp" />
+            tools:layout_editor_absoluteY="360dp"
+            app:drawableStartCompat="@drawable/ic_delete" />
+
+        <TextView
+            android:id="@+id/tvComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comment"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/black"
+            android:drawablePadding="2dp"
+            app:layout_constraintStart_toEndOf="@id/cbLikedBlog"
+            app:layout_constraintBaseline_toBaselineOf="@id/cbLikedBlog"
+            tools:layout_editor_absoluteX="113dp"
+            tools:layout_editor_absoluteY="369dp"
+            app:drawableStartCompat="@drawable/ic_comment" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

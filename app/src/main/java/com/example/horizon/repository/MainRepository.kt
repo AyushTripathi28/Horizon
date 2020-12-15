@@ -2,6 +2,7 @@ package com.example.horizon.repository
 
 import android.net.Uri
 import android.util.Log
+import com.example.horizon.models.CommentsModel
 import com.example.horizon.models.CurrentUser
 import com.example.horizon.models.UploadedPosts
 import com.example.horizon.response.*
@@ -10,7 +11,9 @@ import com.example.horizon.utils.CurrentUserDetails
 import com.example.horizon.utils.ParticularUserDataSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -184,6 +187,41 @@ class MainRepository @Inject constructor(
         emit(DeleteBlogResponse.DeleteBlogSuccess("Blog deleted"))
     }.catch { error ->
         emit(DeleteBlogResponse.DeleteBlogError("Something went wrong. ${error.localizedMessage}"))
+    }
+
+    suspend fun postCommentRepository(commentData: CommentsModel, postId: String){
+        withContext(Dispatchers.IO){
+            try {
+                allPostCollectionRef.document(postId).collection("comments").add(commentData).await()
+            }catch (e: Exception){
+                Log.d("MainRepo", "Commenting error: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    suspend fun getCommentsOfPostRepository(postId: String) = flow {
+        val commentsSnapshot = allPostCollectionRef
+                .document(postId)
+                .collection("comments")
+                .orderBy("commentedAt", Query.Direction.ASCENDING)
+                .get().await()
+        val commentsList = arrayListOf<CommentsModel>()
+        val profileImgHashMap = HashMap<String, String>()
+        for (comments in commentsSnapshot){
+            val commentItem = comments.toObject<CommentsModel>()
+
+            if (profileImgHashMap[commentItem.userName] == null){
+                commentItem.userProfileImg = userCollectionRef.document(commentItem.userId).get().await()["imageUrl"].toString()
+                profileImgHashMap[commentItem.userName] = commentItem.userProfileImg
+            }else{
+                commentItem.userProfileImg = profileImgHashMap[commentItem.userName].toString()
+            }
+
+            commentsList.add(commentItem)
+        }
+        emit(commentsList)
+    }.catch { e->
+        Log.d("MainRepo", "Comments: error is ${e.localizedMessage}")
     }
 
 }

@@ -45,6 +45,9 @@
         <action
             android:id="@+id/action_readPostFragment_to_anotherUserFragment"
             app:destination="@id/anotherUserFragment" />
+        <action
+            android:id="@+id/action_readPostFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment" />
     </fragment>
     <fragment
         android:id="@+id/anotherUserFragment"
@@ -57,4 +60,8 @@
             android:id="@+id/action_anotherUserFragment_to_readPostFragment"
             app:destination="@id/readPostFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/commentsFragment"
+        android:name="com.example.horizon.ui.bottomfragment.CommentsFragment"
+        android:label="CommentsFragment" />
 </navigation>

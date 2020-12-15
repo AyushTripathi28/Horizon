@@ -79,7 +79,6 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
             val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
                 type = "image/*"
             }
-
             startActivityForResult(intent, Constants.GET_PROFILE_IMAGE_CODE)
         }
 

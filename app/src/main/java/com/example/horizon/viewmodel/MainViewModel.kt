@@ -7,6 +7,7 @@ import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import com.example.horizon.models.CommentsModel
 import com.example.horizon.models.CurrentUser
 import com.example.horizon.models.UploadedPosts
 import com.example.horizon.repository.MainRepository
@@ -29,6 +30,12 @@ class MainViewModel @ViewModelInject constructor(
     private val _userProfile = MutableLiveData<CurrentUser>()
     val userprofile: LiveData<CurrentUser>
         get() = _userProfile
+
+    private val _postComment = MutableLiveData<ArrayList<CommentsModel>>().apply {
+        value = arrayListOf()
+    }
+    val postComment: LiveData<ArrayList<CommentsModel>>
+        get() = _postComment
 
     val allPostsLiveData = Pager(PagingConfig(20)){
         repository.getAllPostsRepository()
@@ -169,6 +176,33 @@ class MainViewModel @ViewModelInject constructor(
                 withContext(Dispatchers.Main){
                     emit(it)
                 }
+            }
+        }
+    }
+
+    fun postCommentViewModel(comment: String, imgUrl: String) = viewModelScope.launch {
+        val userName = CurrentUserDetails.userName
+        val userId = CurrentUserDetails.userUid
+        val commentedAt = System.currentTimeMillis()
+        val commentData = CommentsModel(userName, userId,commentedAt =  commentedAt, comment = comment)
+
+        val postId = imgUrl.replace("/", "-")
+        repository.postCommentRepository(commentData, postId)
+        commentData.userProfileImg = CurrentUserDetails.userProfileImgUrl
+        val commentList = _postComment.value
+        commentList?.add(commentData)
+        _postComment.value = commentList
+    }
+
+    fun getCommentsOfPostViewModel(imgUrl: String) = viewModelScope.launch{
+        val postId = imgUrl.replace("/", "-")
+        withContext(Dispatchers.IO){
+            repository.getCommentsOfPostRepository(postId).collect{
+                Log.d("MainViewModel", "Comments: comments collected are: $it")
+                withContext(Dispatchers.Main){
+                    _postComment.value = it
+                }
+
             }
         }
     }
