@@ -30,6 +30,7 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
     private val viewModel: MainViewModel by viewModels()
     private var authorId = ""
     private var imgUrl: String? = null
+    private var post: UploadedPosts? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,6 +54,7 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
         }
         viewModel.post.observe(viewLifecycleOwner, {
             displayPost(it)
+            post = it
         })
 
         viewBinding.tvAuthorNameBlog.setOnClickListener {
@@ -72,6 +74,13 @@ class ReadPostFragment : Fragment(R.layout.fragment_read_post) {
                     putString("imgUrl", it)
                 }
                 findNavController().navigate(R.id.action_readPostFragment_to_commentsFragment, bundle)
+            }
+        }
+
+        viewBinding.tvSaveBlog.setOnClickListener {
+            post?.let {
+                viewModel.bookmarkPostViewModel(it)
+                Snackbar.make(view, "Post bookmarked", Snackbar.LENGTH_SHORT).show()
             }
         }
     }

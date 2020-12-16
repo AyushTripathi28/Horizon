@@ -224,4 +224,32 @@ class MainRepository @Inject constructor(
         Log.d("MainRepo", "Comments: error is ${e.localizedMessage}")
     }
 
+    suspend fun bookmarkPostRepository(post: UploadedPosts){
+        withContext(Dispatchers.IO){
+            try {
+                userCollectionRef.document(CurrentUserDetails.userUid)
+                        .collection("bookmarked")
+                        .document(post.imgUrl.replace("/", "-"))
+                        .set(post, SetOptions.merge()).await()
+
+            }catch (e: Exception){
+                Log.d("MainRepo", "Bookmarking post: error is ${e.localizedMessage}")
+            }
+        }
+    }
+
+    suspend fun getBookmarkedPostsOfUserRepository() = flow<BookmarkedPostsResponse> {
+        val bookmarkedPostsSnapshot = userCollectionRef.document(CurrentUserDetails.userUid)
+                .collection("bookmarked")
+                .get().await()
+        val listOfPosts = arrayListOf<UploadedPosts>()
+        for(posts in bookmarkedPostsSnapshot){
+            val post = posts.toObject<UploadedPosts>()
+            listOfPosts.add(post)
+        }
+        emit(BookmarkedPostsResponse.SuccessBookmarkedPosts(listOfPosts))
+    }.catch { error ->
+        emit(BookmarkedPostsResponse.ErrorBookmarkedPosts("Something went wrong. Error is ${error.localizedMessage}"))
+    }
+
 }

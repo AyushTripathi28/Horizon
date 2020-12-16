@@ -37,6 +37,12 @@ class MainViewModel @ViewModelInject constructor(
     val postComment: LiveData<ArrayList<CommentsModel>>
         get() = _postComment
 
+    private val _bookmarkedPost = MutableLiveData<ArrayList<UploadedPosts>>().apply {
+        value = arrayListOf()
+    }
+    val bookmarkedPost: LiveData<ArrayList<UploadedPosts>>
+        get() = _bookmarkedPost
+
     val allPostsLiveData = Pager(PagingConfig(20)){
         repository.getAllPostsRepository()
     }.flow.cachedIn(viewModelScope).asLiveData(viewModelScope.coroutineContext)
@@ -203,6 +209,28 @@ class MainViewModel @ViewModelInject constructor(
                     _postComment.value = it
                 }
 
+            }
+        }
+    }
+
+    fun bookmarkPostViewModel(post: UploadedPosts) = viewModelScope.launch{
+        repository.bookmarkPostRepository(post)
+    }
+
+    suspend fun getBookmarkedPostsViewModel() = flow {
+        emit(BookmarkedPostsResponse.LoadingBookmarkedPosts)
+        withContext(Dispatchers.IO){
+            repository.getBookmarkedPostsOfUserRepository().collect {
+                withContext(Dispatchers.Main){
+                    when(it){
+                        is BookmarkedPostsResponse.SuccessBookmarkedPosts -> {
+                            _bookmarkedPost.value = it.listOfPosts
+                            emit(it)
+                        }
+                        is BookmarkedPostsResponse.LoadingBookmarkedPosts -> emit(it)
+                        is BookmarkedPostsResponse.ErrorBookmarkedPosts -> emit(it)
+                    }
+                }
             }
         }
     }

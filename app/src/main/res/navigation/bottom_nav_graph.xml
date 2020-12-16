@@ -22,7 +22,11 @@
     <fragment
         android:id="@+id/savedFragment"
         android:name="com.example.horizon.ui.fragments.SavedFragment"
-        android:label="SavedFragment" />
+        android:label="SavedFragment" >
+        <action
+            android:id="@+id/action_savedFragment_to_readPostFragment"
+            app:destination="@id/readPostFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.horizon.ui.fragments.ProfileFragment"
