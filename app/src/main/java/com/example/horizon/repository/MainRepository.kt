@@ -252,4 +252,17 @@ class MainRepository @Inject constructor(
         emit(BookmarkedPostsResponse.ErrorBookmarkedPosts("Something went wrong. Error is ${error.localizedMessage}"))
     }
 
+    suspend fun removePostFromBookmarkedRepository(postId: String){
+        withContext(Dispatchers.IO){
+            try {
+                userCollectionRef.document(CurrentUserDetails.userUid)
+                        .collection("bookmarked")
+                        .document(postId)
+                        .delete().await()
+            }catch (e: Exception){
+                Log.d("MainRepo", "Removing Bookmark error: ${e.localizedMessage}")
+            }
+        }
+    }
+
 }

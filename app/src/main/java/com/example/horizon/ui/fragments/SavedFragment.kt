@@ -5,7 +5,9 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.horizon.R
 import com.example.horizon.adapters.BookmarkedPostsAdapter
 import com.example.horizon.databinding.FragmentSavedBinding
@@ -30,6 +32,7 @@ class SavedFragment : Fragment(R.layout.fragment_saved), BookmarkedPostsAdapter.
         viewBinding = FragmentSavedBinding.bind(view)
         setupRecyclerView()
         getBookmarkedPosts()
+        swipeToRemoveBookmark()
 
         viewModel.bookmarkedPost.observe(viewLifecycleOwner, {
             adapter.submitList(it)
@@ -50,6 +53,30 @@ class SavedFragment : Fragment(R.layout.fragment_saved), BookmarkedPostsAdapter.
                 }
             }
         }
+    }
+
+    private fun swipeToRemoveBookmark(){
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.absoluteAdapterPosition
+                val postImgUrl = adapter.currentList[position].imgUrl
+                viewModel.removePostFromBookmarkedViewModel(postImgUrl)
+                getBookmarkedPosts()
+                Snackbar.make(viewBinding.root, "Post removed", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+        ItemTouchHelper(itemTouchHelperCallback).apply {
+            attachToRecyclerView(viewBinding.rvBookmarkedPosts)
+        }
+
     }
 
     private fun setupRecyclerView(){

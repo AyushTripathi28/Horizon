@@ -234,4 +234,9 @@ class MainViewModel @ViewModelInject constructor(
             }
         }
     }
+
+    fun removePostFromBookmarkedViewModel(postImgUrl: String) = viewModelScope.launch {
+        val postId = postImgUrl.replace("/", "-")
+        repository.removePostFromBookmarkedRepository(postId)
+    }
 }
