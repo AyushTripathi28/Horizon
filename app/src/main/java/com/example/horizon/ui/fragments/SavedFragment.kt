@@ -66,10 +66,16 @@ class SavedFragment : Fragment(R.layout.fragment_saved), BookmarkedPostsAdapter.
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.absoluteAdapterPosition
-                val postImgUrl = adapter.currentList[position].imgUrl
+                val post = adapter.currentList[position]
+                val postImgUrl = post.imgUrl
                 viewModel.removePostFromBookmarkedViewModel(postImgUrl)
                 getBookmarkedPosts()
-                Snackbar.make(viewBinding.root, "Post removed", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(viewBinding.root, "Post removed", Snackbar.LENGTH_SHORT).apply {
+                    setAction("Undo"){
+                        viewModel.bookmarkPostViewModel(post)
+                        getBookmarkedPosts()
+                    }
+                }.show()
             }
         }
 
