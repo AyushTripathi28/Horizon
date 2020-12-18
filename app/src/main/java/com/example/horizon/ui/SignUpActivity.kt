@@ -35,6 +35,12 @@ class SignUpActivity : AppCompatActivity() {
         viewbinding.btnSignUp.setOnClickListener {
             signUpUser()
         }
+
+        viewbinding.tvExistingUser.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun signUpUser(){
@@ -67,7 +73,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun setLoginSpan(){
         val loginSpanString = SpannableString("Already have an account? Login")
         val foregroundColorSpan = ForegroundColorSpan(Color.BLUE)
-        loginSpanString.setSpan(foregroundColorSpan, 25, 29, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        loginSpanString.setSpan(foregroundColorSpan, 25, 30, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         viewbinding.tvExistingUser.text = loginSpanString
     }
 
