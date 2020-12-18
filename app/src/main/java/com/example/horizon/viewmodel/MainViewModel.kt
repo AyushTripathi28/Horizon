@@ -43,6 +43,7 @@ class MainViewModel @ViewModelInject constructor(
     val bookmarkedPost: LiveData<ArrayList<UploadedPosts>>
         get() = _bookmarkedPost
 
+
     val allPostsLiveData = Pager(PagingConfig(20)){
         repository.getAllPostsRepository()
     }.flow.cachedIn(viewModelScope).asLiveData(viewModelScope.coroutineContext)
@@ -239,4 +240,5 @@ class MainViewModel @ViewModelInject constructor(
         val postId = postImgUrl.replace("/", "-")
         repository.removePostFromBookmarkedRepository(postId)
     }
+
 }
