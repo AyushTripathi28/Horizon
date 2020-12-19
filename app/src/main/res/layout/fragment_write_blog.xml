@@ -39,6 +39,7 @@
                 android:gravity="start|top"
                 android:hint="Title of the blog(300 characters)"
                 android:inputType="textMultiLine|textCapSentences"
+                android:backgroundTint="@color/basil_green"
                 android:maxLength="300" />
 
             <EditText
@@ -49,21 +50,19 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="Content of the blog"
+                android:backgroundTint="@color/basil_green"
                 android:inputType="textMultiLine|textCapSentences" />
         </LinearLayout>
     </ScrollView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancel"
-        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="@color/purple_500"
-        app:strokeWidth="5dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnUpload"
@@ -74,8 +73,8 @@
         android:text="Post"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:strokeColor="@color/purple_500"
-        app:strokeWidth="5dp" />
+        app:strokeColor="@color/basil_green"
+        app:strokeWidth="3dp" />
 
     <ProgressBar
         android:id="@+id/pbNewPost"

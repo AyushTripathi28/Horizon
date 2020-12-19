@@ -83,7 +83,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setSignUpSpan(){
         val newSignUpString = SpannableString("Don't have an account? Sign up")
-        val foregroundColor = ForegroundColorSpan(Color.BLUE)
+        val foregroundColor = ForegroundColorSpan(Color.parseColor("#FD5523"))
         newSignUpString.setSpan(foregroundColor, 23,30, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         viewBinding.tvNewSignup.text = newSignUpString
     }

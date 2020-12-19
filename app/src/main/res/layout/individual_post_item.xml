@@ -27,17 +27,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:adjustViewBounds="true"
+                android:cropToPadding="true"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_baseline_image_24"
-                android:cropToPadding="true" />
+                app:srcCompat="@drawable/ic_baseline_image_24" />
 
             <TextView
                 android:id="@+id/tvPostTitleAllPosts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:fontFamily="@font/merriweather_bold_italic"
                 android:hint="Title"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -45,17 +46,19 @@
                 android:id="@+id/tvContentPreviewAllPosts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Content Description"
                 android:layout_margin="5dp"
-                android:textSize="18sp"
                 android:ellipsize="end"
-                android:maxLines="3"/>
+                android:fontFamily="@font/merriweather"
+                android:hint="Content Description"
+                android:maxLines="3"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvAuthorAllPosts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:fontFamily="@font/merriweather_light"
                 android:hint="Author"
                 android:textSize="15sp" />
 

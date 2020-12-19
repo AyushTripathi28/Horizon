@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="basil_green">#356859</color>
+    <color name="basil_orange">#D13F14</color>
+    <color name="basil_background_orange">#4DFFFBE6</color>
+    <color name="basil_bright_orange">#FD5523</color>
 </resources>

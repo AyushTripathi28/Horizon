@@ -92,7 +92,7 @@
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:strokeColor="@color/purple_200"
+        app:strokeColor="@color/basil_green"
         app:strokeWidth="3dp" />
 
     <com.google.android.material.button.MaterialButton

@@ -15,6 +15,7 @@
             android:id="@+id/tvTitleBlog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather_bold_italic"
             android:textColor="#000000"
             android:textSize="30sp"
             android:textStyle="bold"
@@ -28,10 +29,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:fontFamily="@font/merriweather_light"
+            android:textColor="@color/basil_green"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitleBlog"
-            tools:text="Author name"
-            android:textColor="@color/teal_200"/>
+            tools:text="Author name" />
 
         <TextView
             android:id="@+id/tvCreatedAtBlog"
@@ -57,7 +59,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="18sp"
+            android:fontFamily="@font/merriweather"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivImageBlog"
