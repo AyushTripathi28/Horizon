@@ -27,7 +27,8 @@
                 android:layout_height="125dp"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/default_profile_image" />
+                app:srcCompat="@drawable/default_profile_image"
+                android:contentDescription="@string/profile_image_of_user" />
 
             <TextView
                 android:id="@+id/tvAnotherProfileName"
@@ -55,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="Edit Profile"
+                android:text="@string/edit_profile"
                 android:textColor="@color/black" />
 
             <TextView
@@ -64,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="All Posts"
+                android:text="@string/all_posts"
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 android:textStyle="bold" />

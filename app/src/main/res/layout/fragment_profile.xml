@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="Sign Out"
+                android:text="@string/sign_out"
                 app:strokeColor="@color/basil_green"
                 app:strokeWidth="3dp" />
 
@@ -37,7 +37,8 @@
                 android:layout_height="125dp"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/default_profile_image" />
+                app:srcCompat="@drawable/default_profile_image"
+                android:contentDescription="@string/profile_image_of_user" />
 
             <TextView
                 android:id="@+id/tvProfileName"
@@ -63,7 +64,7 @@
                 android:id="@+id/btnEditProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Edit Profile"
+                android:text="@string/edit_profile"
                 android:layout_marginTop="15dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:textColor="@color/black"/>

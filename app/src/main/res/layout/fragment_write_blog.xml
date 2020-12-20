@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -28,7 +27,8 @@
                 android:layout_margin="10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_baseline_image_24"
-                app:srcCompat="@drawable/ic_baseline_image_24" />
+                app:srcCompat="@drawable/ic_baseline_image_24"
+                android:contentDescription="@string/post_image" />
 
             <EditText
                 android:id="@+id/etTitleNewPost"
@@ -37,10 +37,11 @@
                 android:layout_margin="10dp"
                 android:ems="10"
                 android:gravity="start|top"
-                android:hint="Title of the blog(300 characters)"
+                android:hint="@string/title_of_the_blog_300_characters"
                 android:inputType="textMultiLine|textCapSentences"
                 android:backgroundTint="@color/basil_green"
-                android:maxLength="300" />
+                android:maxLength="300"
+                android:autofillHints="@string/title_of_the_blog_300_characters" />
 
             <EditText
                 android:id="@+id/etContentNewPost"
@@ -49,9 +50,10 @@
                 android:layout_margin="10dp"
                 android:ems="10"
                 android:gravity="start|top"
-                android:hint="Content of the blog"
+                android:hint="@string/content_of_the_blog"
                 android:backgroundTint="@color/basil_green"
-                android:inputType="textMultiLine|textCapSentences" />
+                android:inputType="textMultiLine|textCapSentences"
+                android:autofillHints="@string/content_of_the_blog" />
         </LinearLayout>
     </ScrollView>
 
@@ -60,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Cancel"
+        android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -70,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Post"
+        android:text="@string/post"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:strokeColor="@color/basil_green"

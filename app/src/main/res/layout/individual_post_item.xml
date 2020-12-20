@@ -29,7 +29,8 @@
                 android:adjustViewBounds="true"
                 android:cropToPadding="true"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_baseline_image_24" />
+                app:srcCompat="@drawable/ic_baseline_image_24"
+                android:contentDescription="@string/post_image" />
 
             <TextView
                 android:id="@+id/tvPostTitleAllPosts"
@@ -37,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:fontFamily="@font/merriweather_bold_italic"
-                android:hint="Title"
+                android:hint="@string/title"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -49,7 +50,7 @@
                 android:layout_margin="5dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/merriweather"
-                android:hint="Content Description"
+                android:hint="@string/content_description"
                 android:maxLines="3"
                 android:textSize="16sp" />
 
@@ -59,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:fontFamily="@font/merriweather_light"
-                android:hint="Author"
+                android:hint="@string/author"
                 android:textSize="15sp" />
 
             <LinearLayout
@@ -71,10 +72,10 @@
 
                 <TextView
                     android:id="@+id/tvPostCreatedAllPosts"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:hint="Created at" />
+                    android:hint="@string/created_at" />
 
                 <TextView
                     android:id="@+id/tvTotalHeartsAllPosts"

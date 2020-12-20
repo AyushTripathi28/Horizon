@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">Horizon</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account_sign_up">Don\'t have an account? Sign up</string>
+    <string name="horizon">HORiZON</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="signup">SignUp</string>
+    <string name="welcome">Welcome!</string>
+    <string name="profile_image_of_user">Profile image of user</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="all_posts">All Posts</string>
+    <string name="comments">Comments</string>
+    <string name="comment">Comment</string>
+    <string name="post">Post</string>
+    <string name="change_profile_photo">Change profile photo</string>
+    <string name="remove_profile_photo">Remove profile photo</string>
+    <string name="bio_250_characters">Bio (250 characters)</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="explore_fragment_not_implemented">Explore fragment not implemented</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="post_image">Post Image</string>
+    <string name="_0_liked">0 Liked</string>
+    <string name="title_of_the_blog_300_characters">Title of the blog(300 characters)</string>
+    <string name="content_of_the_blog">Content of the blog</string>
+    <string name="_22_12_2020">22/12/2020</string>
+    <string name="this_is_the_hint_comment_to_check_how_it_looks">This is the hint comment to check how it looks</string>
+    <string name="title">Title</string>
+    <string name="content_description">Content Description</string>
+    <string name="author">Author</string>
+    <string name="created_at">Created at</string>
 </resources>

@@ -52,7 +52,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvAuthorNameBlog"
-            tools:src="@drawable/ic_baseline_image_24" />
+            tools:src="@drawable/ic_baseline_image_24"
+            android:contentDescription="@string/post_image" />
 
         <TextView
             android:id="@+id/tvContentBlog"
@@ -72,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:button="@drawable/heart_like_button"
-            android:text="5 Liked"
+            android:text="@string/_0_liked"
             app:layout_constraintStart_toStartOf="@+id/tvTitleBlog"
             app:layout_constraintTop_toBottomOf="@+id/tvContentBlog"
             app:useMaterialThemeColors="false"/>
@@ -81,7 +82,7 @@
             android:id="@+id/tvSaveBlog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
+            android:text="@string/save"
             android:layout_marginStart="5dp"
             android:textColor="@color/black"
             app:drawableStartCompat="@drawable/ic_saved"
@@ -113,7 +114,7 @@
             android:id="@+id/tvComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Comment"
+            android:text="@string/comment"
             android:layout_marginStart="5dp"
             android:textColor="@color/black"
             android:drawablePadding="2dp"

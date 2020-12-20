@@ -13,15 +13,17 @@
         app:layout_constraintBottom_toTopOf="@+id/tvComment"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/default_profile_image" />
+        app:srcCompat="@drawable/default_profile_image"
+        android:contentDescription="@string/profile_image_of_user" />
 
     <TextView
         android:id="@+id/tvCommentUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/merriweather"
-        android:hint="Name"
+        android:hint="@string/name"
         android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,8 +35,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/merriweather_light"
-        android:hint="22/12/2020"
+        android:hint="@string/_22_12_2020"
         android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@id/tvCommentUserName"
         app:layout_constraintStart_toStartOf="@+id/tvCommentUserName"
@@ -44,7 +47,7 @@
         android:id="@+id/tvComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="This is the hint comment to check how it looks"
+        android:hint="@string/this_is_the_hint_comment_to_check_how_it_looks"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvCommentCreatedAt" />
