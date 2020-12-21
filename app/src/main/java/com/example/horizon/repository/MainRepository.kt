@@ -37,6 +37,8 @@ class MainRepository @Inject constructor(
 
     fun getCurrentUserRepository() = auth.currentUser
 
+    //Gets the current logged in user data and stores values in a singleton containing the data of the user.
+    //CurrentUserDetails is the singleton class here.
     fun getCurrentUserDetailsRepository(currentUserUid: String){
         userCollectionRef.document(currentUserUid).addSnapshotListener { value, error ->
             error?.let {
@@ -55,6 +57,7 @@ class MainRepository @Inject constructor(
             }
         }
     }
+
     suspend fun loginUserRepository(email: String, password: String) = flow<LoginResponse>{
         Log.d("MainRepo", "Thread while login is : ${Thread.currentThread().name}")
         auth.signInWithEmailAndPassword(email, password).await()
@@ -65,6 +68,10 @@ class MainRepository @Inject constructor(
         emit(LoginResponse.LoginError("Check your email and password or try again later."))
     }
 
+    //Signs up the new user and create a document with the userId as it's id in the AllUsers collection.
+    //A new user document is created with only it's name.
+    //After creating the user the name, and the userId of the new user is stored in the CurrentUserDetails singleton,
+    //for further use. The user is logged in automatically after creating the account.
     suspend fun signUpNewUserRepository(name: String, email: String, password: String) = flow<SignUpResponse> {
         auth.createUserWithEmailAndPassword(email, password).await()
         val currentUser = CurrentUser(name)
@@ -80,6 +87,10 @@ class MainRepository @Inject constructor(
 
     fun signOutCurrentUserRepository() = auth.signOut()
 
+    //Post title, content, image is passed as the function parameter.
+    //User name, userId is retrieved from CurrentUserDetails singleton.
+    //Empty arrayList is generated for the liked by entry.
+    //The image is stored in Firebase storage. And after uploading, the download url is retrieved.
     suspend fun uploadNewPostRepository(imgUri: Uri, postTitle: String, postContent: String) = flow<PostUploadResponse> {
         val currentUserId = CurrentUserDetails.userUid
         val authorName = CurrentUserDetails.userName
@@ -107,8 +118,8 @@ class MainRepository @Inject constructor(
         emit(PostUploadResponse.PostUploadError("Something went wrong while uploading"))
     }
 
+    //Gets a particular post object from the AllPosts collection.
     suspend fun getPostRepository(postId: String) = flow<PostRetrieveResponse> {
-        Log.d("MainRepo", "Post retrieved")
         val post = allPostCollectionRef.document(postId).get().await().toObject(UploadedPosts::class.java)
         emit(PostRetrieveResponse.PostRetrieveSuccessful(post!!))
 
@@ -117,6 +128,7 @@ class MainRepository @Inject constructor(
         emit(PostRetrieveResponse.PostRetrieveError("Something went wrong"))
     }
 
+    //Sets the new array for a particular post's liked by array.
     suspend fun likeDislikePostRepository(postId: String, newLikeOrDislikeList: ArrayList<String>){
         withContext(Dispatchers.IO){
             try {
@@ -127,13 +139,18 @@ class MainRepository @Inject constructor(
         }
     }
 
+    //Returns the paging data source object for all posts
     fun getAllPostsRepository() = allPostsPagingSource
 
+    //Provides userId for a particular user to the paging data source
+    //and returns its object.
     fun getParticularUserPostsRepository(userId: String) : ParticularUserDataSource{
         particularUserDataSource.userId = userId
         return  particularUserDataSource
     }
 
+    //For profile image, removeProfileImgMsg indicated whether the img was empty or user removed it.
+    //if the user wants to remove it, the the img is deleted from the storage and the value corresponding for imageUrl is set ot empty string
     suspend fun changeUserProfileRepository(newName: String, newBio: String, newImage: Uri?, removeProfileImgMsg: String) = flow<UserDetailsChanged> {
         val oldName = CurrentUserDetails.userName
         val oldBio = CurrentUserDetails.userBio
@@ -207,6 +224,9 @@ class MainRepository @Inject constructor(
                 .get().await()
         val commentsList = arrayListOf<CommentsModel>()
         val profileImgHashMap = HashMap<String, String>()
+        //Gets the current profile image of the user and stores it in a hashmap to reduce the no. of network calls
+        //If the username is present in hashmap then the commentItem gets that url.
+        //Else current profile img url is fetched from the network.
         for (comments in commentsSnapshot){
             val commentItem = comments.toObject<CommentsModel>()
 
